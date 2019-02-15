@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 namespace Probability
 {
+    using SDU = StandardDiscreteUniform;
     // Extension methods on distributions
     public static class Distribution
     {
@@ -29,6 +31,19 @@ namespace Probability
                 .NewlineSeparated();
             string ToLabel(T t) =>
                 t.ToString().PadLeft(labelMax);
+        }
+
+        public static IDiscreteDistribution<R> Select<A, R>(
+                this IDiscreteDistribution<A> d,
+                Func<A, R> projection) =>
+            Projected<A, R>.Distribution(d, projection);
+
+        public static IDiscreteDistribution<T> ToUniform<T>(
+            this IEnumerable<T> items)
+        {
+            var list = items.ToList();
+            return SDU.Distribution(0, list.Count - 1)
+                .Select(i => list[i]);
         }
     }
 }
