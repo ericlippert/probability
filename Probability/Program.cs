@@ -7,7 +7,7 @@ namespace Probability
         static void Main()
         {
             Console.WriteLine("Probability");
-            RandomIsAwful.DoIt();
+            // RandomIsAwful.DoIt();
             Console.WriteLine("Press Enter to finish");
             Console.ReadLine();
         }
