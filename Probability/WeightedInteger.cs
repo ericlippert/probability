@@ -5,12 +5,11 @@ using System.Linq;
 namespace Probability
 {
     using SDU = StandardDiscreteUniform;
-    // Weighted integer distribution using inverse cumulative method,
-    // linear searching.
+    // Weighted integer distribution using rejection sampling method.
     public sealed class WeightedInteger : IDiscreteDistribution<int>
     {
         private readonly List<int> weights;
-        private readonly List<int> cumulative;
+        private readonly List<IDistribution<int>> distributions;
 
         public static IDiscreteDistribution<int> Distribution(params int[] weights) =>
             Distribution((IEnumerable<int>)weights);
@@ -27,13 +26,15 @@ namespace Probability
             return new WeightedInteger(w);
         }
 
+
         private WeightedInteger(List<int> weights)
         {
             this.weights = weights;
-            this.cumulative = new List<int>(weights.Count);
-            cumulative.Add(weights[0]);
-            for (int i = 1; i < weights.Count; i += 1)
-                cumulative.Add(cumulative[i - 1] + weights[i]);
+            this.distributions =
+              new List<IDistribution<int>>(weights.Count);
+            int max = weights.Max();
+            foreach (int w in weights)
+                distributions.Add(Bernoulli.Distribution(w, max - w));
         }
 
         public IEnumerable<int> Support() =>
@@ -44,12 +45,13 @@ namespace Probability
 
         public int Sample()
         {
-            int total = cumulative[cumulative.Count - 1];
-            int uniform = SDU.Distribution(1, total).Sample();
-            int result = 0;
-            while (cumulative[result] < uniform)
-                result += 1;
-            return result;
+            var rows = SDU.Distribution(0, weights.Count - 1);
+            while (true)
+            {
+                int row = rows.Sample();
+                if (distributions[row].Sample() == 0)
+                    return row;
+            }
         }
 
         public override string ToString() =>
