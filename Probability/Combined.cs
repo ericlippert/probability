@@ -4,35 +4,47 @@ using System.Linq;
 
 namespace Probability
 {
-    public sealed class Combined<A, R> : IDiscreteDistribution<R>
+    // Combined probability distribution (with a projection)
+    public sealed class Combined<A, B, C> :
+      IDiscreteDistribution<C>
     {
-        private readonly List<R> support;
-        private readonly IDiscreteDistribution<A> prior;
-        private readonly Func<A, IDiscreteDistribution<R>> likelihood;
 
-        public static IDiscreteDistribution<R> Distribution(
+        private readonly List<C> support;
+        private readonly IDiscreteDistribution<A> prior;
+        private readonly Func<A, IDiscreteDistribution<B>> likelihood;
+        private readonly Func<A, B, C> projection;
+
+        public static IDiscreteDistribution<C> Distribution(
                 IDiscreteDistribution<A> prior,
-                Func<A, IDiscreteDistribution<R>> likelihood) =>
-            new Combined<A, R>(prior, likelihood);
+                Func<A, IDiscreteDistribution<B>> likelihood,
+                Func<A, B, C> projection) =>
+            new Combined<A, B, C>(prior, likelihood, projection);
 
         private Combined(
-              IDiscreteDistribution<A> prior,
-              Func<A, IDiscreteDistribution<R>> likelihood)
+            IDiscreteDistribution<A> prior,
+            Func<A, IDiscreteDistribution<B>> likelihood,
+            Func<A, B, C> projection)
         {
             this.prior = prior;
             this.likelihood = likelihood;
-            var q = from a in prior.Support()
+            this.projection = projection;
+            var s = from a in prior.Support()
                     from b in this.likelihood(a).Support()
-                    select b;
-            this.support = q.Distinct().ToList();
+                    select projection(a, b);
+            this.support = s.Distinct().ToList();
         }
-        public IEnumerable<R> Support() =>
-            this.support.Select(x => x);  
 
-        public R Sample() =>
-            this.likelihood(this.prior.Sample()).Sample();
+        public IEnumerable<C> Support() =>
+            this.support.Select(x => x);
 
-        public int Weight(R r) => 
+        public C Sample()
+        {
+            A a = this.prior.Sample();
+            B b = this.likelihood(a).Sample();
+            return this.projection(a, b);
+        }
+
+        public int Weight(C c) => 
             throw new NotImplementedException();
     }
 }

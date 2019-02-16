@@ -54,10 +54,21 @@ namespace Probability
             return s.ToWeighted(s.Select(t => d.Weight(t)));
         }
 
-        public static IDiscreteDistribution<R> SelectMany<A, R>(
+        public static IDiscreteDistribution<C> SelectMany<A, B, C>(
                 this IDiscreteDistribution<A> prior,
-                Func<A, IDiscreteDistribution<R>> likelihood) =>
-            Combined<A, R>.Distribution(prior, likelihood);
+                Func<A, IDiscreteDistribution<B>> likelihood,
+                Func<A, B, C> projection) =>
+            Combined<A, B, C>.Distribution(prior, likelihood, projection);
+
+        public static IDiscreteDistribution<B> SelectMany<A, B>(
+                this IDiscreteDistribution<A> prior,
+                Func<A, IDiscreteDistribution<B>> likelihood) =>
+            SelectMany(prior, likelihood, (a, b) => b);
+
+        public static IDiscreteDistribution<(A, B)> Joint<A, B>(
+                this IDiscreteDistribution<A> prior,
+                Func<A, IDiscreteDistribution<B>> likelihood) =>
+            SelectMany(prior, likelihood, (a, b) => (a, b));
 
         public static IDiscreteDistribution<T> ToUniform<T>(
             this IEnumerable<T> items)
