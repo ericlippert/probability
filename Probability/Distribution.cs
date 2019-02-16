@@ -38,6 +38,11 @@ namespace Probability
                 Func<A, R> projection) =>
             Projected<A, R>.Distribution(d, projection);
 
+        public static IDiscreteDistribution<T> Where<T>(
+                this IDiscreteDistribution<T> d,    
+                Func<T, bool> predicate) =>
+            Conditioned<T>.Distribution(d, predicate);
+
         public static IDiscreteDistribution<T> ToUniform<T>(
             this IEnumerable<T> items)
         {
