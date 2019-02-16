@@ -8,8 +8,10 @@ namespace Probability
     {
         public static IDiscreteDistribution<int> Distribution(int zero, int one)
         {
-            if (zero < 0 || one < 0 || zero == 0 && one == 0)
+            if (zero < 0 || one < 0)
                 throw new ArgumentException();
+            if (zero == 0 && one == 0)
+                return Empty<int>.Distribution;
             if (zero == 0)
                 return Singleton<int>.Distribution(1);
             if (one == 0)

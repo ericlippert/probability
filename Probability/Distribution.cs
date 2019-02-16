@@ -61,6 +61,7 @@ namespace Probability
         {
             int product = prior.Support()
                 .Select(a => likelihood(a).TotalWeight())
+                .Where(x => x != 0)
                 .Product();
             var w = from a in prior.Support()
                     let pb = likelihood(a)

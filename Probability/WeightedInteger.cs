@@ -17,15 +17,17 @@ namespace Probability
         public static IDiscreteDistribution<int> Distribution(IEnumerable<int> weights)
         {
             List<int> w = weights.ToList();
-            int gcd = weights.GCD();
-            for (int i = 0; i < w.Count; i += 1)
-                w[i] /= gcd;
-            if (w.Any(x => x < 0) || !w.Any(x => x > 0))
+            if (w.Any(x => x < 0))
                 throw new ArgumentException();
+            if (!w.Any(x => x > 0))
+                return Empty<int>.Distribution;
             if (w.Count == 1)
                 return Singleton<int>.Distribution(0);
             if (w.Count == 2)
                 return Bernoulli.Distribution(w[0], w[1]);
+            int gcd = weights.GCD();
+            for (int i = 0; i < w.Count; i += 1)
+                w[i] /= gcd;
             return new WeightedInteger(w);
         }
 

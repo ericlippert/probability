@@ -7,10 +7,12 @@ namespace Probability
     public sealed class StandardDiscreteUniform :
       IDiscreteDistribution<int>
     {
-        public static StandardDiscreteUniform Distribution(int min, int max)
+        public static IDiscreteDistribution<int> Distribution(int min, int max)
         {
             if (min > max)
-                throw new ArgumentException();
+                return Empty<int>.Distribution;
+            if (min == max)
+                return Singleton<int>.Distribution(min);
             return new StandardDiscreteUniform(min, max);
         }
         public int Min { get; }
