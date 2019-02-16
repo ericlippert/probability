@@ -12,10 +12,19 @@ namespace Probability
         private readonly IDistribution<int>[] distributions;
 
         public static IDiscreteDistribution<int> Distribution(params int[] weights) =>
-            new WeightedInteger(weights);
+            Distribution((IEnumerable<int>)weights);
 
-        public static IDiscreteDistribution<int> Distribution(IEnumerable<int> weights) =>
-            new WeightedInteger(weights);
+        public static IDiscreteDistribution<int> Distribution(IEnumerable<int> weights)
+        {
+            List<int> w = weights.ToList();
+            if (w.Any(x => x < 0) || !w.Any(x => x > 0))
+                throw new ArgumentException();
+            if (w.Count == 1)
+                return Singleton<int>.Distribution(0);
+            if (w.Count == 2)
+                return Bernoulli.Distribution(w[0], w[1]);
+            return new WeightedInteger(w);
+        }
 
         private WeightedInteger(IEnumerable<int> weights)
         {
