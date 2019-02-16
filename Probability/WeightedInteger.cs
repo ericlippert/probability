@@ -17,6 +17,9 @@ namespace Probability
         public static IDiscreteDistribution<int> Distribution(IEnumerable<int> weights)
         {
             List<int> w = weights.ToList();
+            int gcd = weights.GCD();
+            for (int i = 0; i < w.Count; i += 1)
+                w[i] /= gcd;
             if (w.Any(x => x < 0) || !w.Any(x => x > 0))
                 throw new ArgumentException();
             if (w.Count == 1)

@@ -62,5 +62,11 @@ namespace Probability
 
         public static int Product(this IEnumerable<int> items) =>
             items.Aggregate(1, (a, b) => a * b);
+
+        public static int GCD(int a, int b) =>
+            b == 0 ? a : GCD(b, a % b);
+
+        public static int GCD(this IEnumerable<int> numbers) =>
+            numbers.Aggregate(GCD);
     }
 }

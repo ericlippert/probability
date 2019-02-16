@@ -14,7 +14,8 @@ namespace Probability
                 return Singleton<int>.Distribution(1);
             if (one == 0)
                 return Singleton<int>.Distribution(0);
-            return new Bernoulli(zero, one);
+            int gcd = Extensions.GCD(zero, one);
+            return new Bernoulli(zero / gcd, one / gcd);
         }
         public int Zero { get; }
         public int One { get; }
