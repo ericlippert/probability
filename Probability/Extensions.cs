@@ -54,6 +54,9 @@ namespace Probability
         public static string Concatenated<T>(this IEnumerable<T> items) =>
             string.Join("", items);
 
+        public static string CommaSeparated<T>(this IEnumerable<T> items) =>
+            items.Separated(",");
+
         public static string NewlineSeparated<T>(this IEnumerable<T> items) =>
             items.Separated("\n");
     }
