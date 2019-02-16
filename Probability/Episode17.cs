@@ -68,8 +68,6 @@ namespace Probability
             {
                 Console.WriteLine("Now we throw.");
             }
-
-
         }
 
         static IEnumerable<int> Foo(string bar)
