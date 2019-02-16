@@ -59,5 +59,8 @@ namespace Probability
 
         public static string NewlineSeparated<T>(this IEnumerable<T> items) =>
             items.Separated("\n");
+
+        public static int Product(this IEnumerable<int> items) =>
+            items.Aggregate(1, (a, b) => a * b);
     }
 }

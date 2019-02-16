@@ -55,10 +55,21 @@ namespace Probability
         }
 
         public static IDiscreteDistribution<C> SelectMany<A, B, C>(
-                this IDiscreteDistribution<A> prior,
-                Func<A, IDiscreteDistribution<B>> likelihood,
-                Func<A, B, C> projection) =>
-            Combined<A, B, C>.Distribution(prior, likelihood, projection);
+            this IDiscreteDistribution<A> prior,
+            Func<A, IDiscreteDistribution<B>> likelihood,
+            Func<A, B, C> projection)
+        {
+            int product = prior.Support()
+                .Select(a => likelihood(a).TotalWeight())
+                .Product();
+            var w = from a in prior.Support()
+                    let pb = likelihood(a)
+                    from b in pb.Support()
+                    group prior.Weight(a) * pb.Weight(b) * product / pb.TotalWeight()
+                    by projection(a, b);
+            var dict = w.ToDictionary(g => g.Key, g => g.Sum());
+            return dict.Keys.ToWeighted(dict.Values);
+        }
 
         public static IDiscreteDistribution<B> SelectMany<A, B>(
                 this IDiscreteDistribution<A> prior,
@@ -90,5 +101,8 @@ namespace Probability
                 this IEnumerable<T> items,
                 params int[] weights) =>
             items.ToWeighted((IEnumerable<int>)weights);
+
+        public static int TotalWeight<T>(this IDiscreteDistribution<T> d) =>
+            d.Support().Select(t => d.Weight(t)).Sum();
     }
 }
