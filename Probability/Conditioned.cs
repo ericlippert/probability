@@ -23,6 +23,7 @@ namespace Probability
                 return Singleton<T>.Distribution(d.support[0]);
             return d;
         }
+
         private Conditioned(
           IDiscreteDistribution<T> underlying,
           Func<T, bool> predicate)
