@@ -59,14 +59,14 @@ namespace Probability
             Func<A, IDiscreteDistribution<B>> likelihood,
             Func<A, B, C> projection)
         {
-            int product = prior.Support()
+            int lcm = prior.Support()
                 .Select(a => likelihood(a).TotalWeight())
                 .Where(x => x != 0)
-                .Product();
+                .LCM();
             var w = from a in prior.Support()
                     let pb = likelihood(a)
                     from b in pb.Support()
-                    group prior.Weight(a) * pb.Weight(b) * product / pb.TotalWeight()
+                    group prior.Weight(a) * pb.Weight(b) * lcm / pb.TotalWeight()
                     by projection(a, b);
             var dict = w.ToDictionary(g => g.Key, g => g.Sum());
             return dict.Keys.ToWeighted(dict.Values);
