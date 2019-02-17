@@ -103,6 +103,8 @@ namespace Probability
             public static void DoIt()
             {
                 Console.WriteLine("Attempt Two: Every statement is a local method");
+                Console.WriteLine(Workflow(3).ShowWeights());
+                Console.WriteLine("We can apply inlining optimizations to that mess");
                 Console.WriteLine(WorkflowInlined(3).ShowWeights());
             }
 

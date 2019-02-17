@@ -120,5 +120,10 @@ namespace Probability
 
         public static int TotalWeight<T>(this IDiscreteDistribution<T> d) =>
             d.Support().Select(t => d.Weight(t)).Sum();
+
+        public static double ExpectedValue(this IDiscreteDistribution<int> d) =>
+            d.Support()
+            .Select(s => 
+                (double)s * d.Weight(s)).Sum() / d.TotalWeight();
     }
 }
