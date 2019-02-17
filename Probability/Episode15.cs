@@ -48,7 +48,6 @@ namespace Probability
             var doses = prior.SelectMany(likelihood, projection);
             Console.WriteLine(doses.Histogram());
             Console.WriteLine(doses.ShowWeights());
-
         }
     }
 }

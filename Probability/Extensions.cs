@@ -60,13 +60,19 @@ namespace Probability
         public static string NewlineSeparated<T>(this IEnumerable<T> items) =>
             items.Separated("\n");
 
-        public static int Product(this IEnumerable<int> items) =>
-            items.Aggregate(1, (a, b) => a * b);
+        public static int Product(this IEnumerable<int> numbers) =>
+            numbers.Aggregate(1, (a, b) => a * b);
 
         public static int GCD(int a, int b) =>
             b == 0 ? a : GCD(b, a % b);
 
         public static int GCD(this IEnumerable<int> numbers) =>
             numbers.Aggregate(GCD);
+
+        public static int LCM(int a, int b) =>
+            a * b / GCD(a, b);
+
+        public static int LCM(this IEnumerable<int> numbers) =>
+            numbers.Aggregate(1, LCM);
     }
 }
