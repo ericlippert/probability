@@ -7,7 +7,7 @@ namespace Probability
         {
             Console.WriteLine("Episode 22");
             Console.WriteLine(Game(5).ShowWeights());
-            Console.WriteLine(Game(5).ExpectedValue()); // 4.03125
+            Console.WriteLine(Game(5).ExpectedValue());
         }
 
         static IDiscreteDistribution<bool> Flip() =>
