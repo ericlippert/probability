@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Probability
 {
-    sealed class Markov<T> : IDistribution<IEnumerable<T>>
+    public sealed class Markov<T> : IDistribution<IEnumerable<T>>
     {
         private readonly IDistribution<T> initial;
         private readonly Func<T, IDistribution<T>> transition;

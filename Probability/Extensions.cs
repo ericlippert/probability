@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Probability
@@ -60,6 +61,9 @@ namespace Probability
         public static string NewlineSeparated<T>(this IEnumerable<T> items) =>
             items.Separated("\n");
 
+        public static string SpaceSeparated<T>(this IEnumerable<T> items) =>
+            items.Separated(" ");
+
         public static int Product(this IEnumerable<int> numbers) =>
             numbers.Aggregate(1, (a, b) => a * b);
 
@@ -74,5 +78,36 @@ namespace Probability
 
         public static int LCM(this IEnumerable<int> numbers) =>
             numbers.Aggregate(1, LCM);
+
+        static readonly char[] punct = "<>,*-()[#]@:%\"/';_&}".ToCharArray();
+
+        public static IEnumerable<string> Words(this IEnumerable<string> lines) =>
+          from line in lines
+          from word in line.Split()
+          let raw = word.Trim(punct)
+          where raw != ""
+          select raw;
+
+        public static IEnumerable<List<string>> Sentences(this IEnumerable<string> words) =>
+            words.Split(w => {
+                char c = w[w.Length - 1];
+                return c == '.' || c == '!' || c == '?';
+            });
+
+        public static IEnumerable<List<T>> Split<T>(this IEnumerable<T> items, Func<T, bool> last)
+        {
+            var list = new List<T>();
+            foreach (T item in items)
+            {
+                list.Add(item);
+                if (last(item))
+                {
+                    yield return list;
+                    list = new List<T>();
+                }
+            }
+            if (list.Any())
+                yield return list;
+        }
     }
 }
