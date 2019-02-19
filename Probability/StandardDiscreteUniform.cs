@@ -23,7 +23,7 @@ namespace Probability
         public IEnumerable<int> Support() =>
             Enumerable.Range(Min, 1 + Max - Min);
         public int Sample() =>
-            (int)((SCU.Distribution.Sample() * (1.0 + Max - Min)) + Min);
+            (int)(SCU.Distribution.Sample() * (1.0 + Max - Min)) + Min;
         public int Weight(int i) =>
             (Min <= i && i <= Max) ? 1 : 0;
         public override string ToString() =>
