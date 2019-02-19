@@ -14,8 +14,10 @@ namespace Probability
           Func<A, R> projection)
         {
             var result = new Projected<A, R>(underlying, projection);
-            if (result.Support().Count() == 1)
-                return Singleton<R>.Distribution(result.Support().First());
+            var support = result.Support().ToList();
+
+            if (support.Count() == 1)
+                return Singleton<R>.Distribution(support.Single());
             return result;
         }
         private Projected(
