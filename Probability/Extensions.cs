@@ -38,7 +38,7 @@ namespace Probability
             int labelMax = dict.Keys
                 .Select(x => x.ToString().Length)
                 .Max();
-            var sup = dict.Keys.OrderBy(k => k).ToList();
+            var sup = dict.Keys.OrderBy(k => k as IComparable ?? ToLabel(k)).ToList();
             int max = dict.Values.Max();
             double scale = max < width ? 1.0 : ((double)width) / max;
             return sup.Select(s => $"{ToLabel(s)}|{Bar(s)}").NewlineSeparated();
