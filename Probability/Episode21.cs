@@ -43,6 +43,9 @@ namespace Probability
 
                 public int Weight(bool t) =>
                     throw new NotImplementedException();
+
+                double IWeightedDistribution<bool>.Weight(bool t) =>
+                    throw new NotImplementedException();
             }
 
             static IDiscreteDistribution<int> TwoDSix() =>
@@ -63,6 +66,10 @@ namespace Probability
 
                 public int Weight(int t) =>
                     throw new NotImplementedException();
+
+                double IWeightedDistribution<int>.Weight(int t) =>
+                    throw new NotImplementedException();
+
             }
 
             static IDiscreteDistribution<string> Workflow(int z) =>
@@ -94,6 +101,10 @@ namespace Probability
 
                 public int Weight(string t) =>
                     throw new NotImplementedException();
+
+                double IWeightedDistribution<string>.Weight(string t) =>
+                    throw new NotImplementedException();
+
             }
         }
 
@@ -112,7 +123,7 @@ namespace Probability
             {
                 IDiscreteDistribution<bool> S0(int x) =>
                     Bernoulli.Distribution(1, 1).SelectMany(_x => S1(_x));
-                IDiscreteDistribution<bool> S1(int x) => 
+                IDiscreteDistribution<bool> S1(int x) =>
                     Singleton<bool>.Distribution(x == 0);
                 return S0(0);
             }
@@ -147,14 +158,14 @@ namespace Probability
             }
 
             static IDiscreteDistribution<string> WorkflowInlined(int z) =>
-                TwoDSix().SelectMany(ii => 
+                TwoDSix().SelectMany(ii =>
                     ii == 2 ?
                         Singleton<string>.Distribution("two") :
                         ii != z ?
-                            Flip().SelectMany(b => 
-                                Singleton<string>.Distribution(b ? 
-                                    "heads" : 
-                                    ii.ToString())) : 
+                            Flip().SelectMany(b =>
+                                Singleton<string>.Distribution(b ?
+                                    "heads" :
+                                    ii.ToString())) :
                             Empty<string>.Distribution);
         }
     }
