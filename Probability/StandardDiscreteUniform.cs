@@ -5,7 +5,8 @@ namespace Probability
 {
     using SCU = StandardContinuousUniform;
     public sealed class StandardDiscreteUniform :
-      IDiscreteDistribution<int>
+      IDiscreteDistribution<int>,
+      IWeightedDistribution<int>
     {
         public static IDiscreteDistribution<int> Distribution(int min, int max)
         {
@@ -28,6 +29,7 @@ namespace Probability
             (int)((SCU.Distribution.Sample() * (1.0 + Max - Min)) + Min);
         public int Weight(int i) =>
             (Min <= i && i <= Max) ? 1 : 0;
+        double IWeightedDistribution<int>.Weight(int x) => this.Weight(x);
         public override string ToString() =>
             $"StandardDiscreteUniform[{Min}, {Max}]";
     }
