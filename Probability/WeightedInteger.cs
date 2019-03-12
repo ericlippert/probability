@@ -6,7 +6,7 @@ namespace Probability
 {
     using SDU = StandardDiscreteUniform;
     // Weighted integer distribution using alias method.
-    public sealed class WeightedInteger : IDiscreteDistribution<int>
+    public sealed class WeightedInteger : IDiscreteDistribution<int>, IWeightedDistribution<int>
     {
         private readonly List<int> weights;
         private readonly IDistribution<int>[] distributions;
@@ -75,6 +75,8 @@ namespace Probability
 
         public int Weight(int i) =>
             0 <= i && i < weights.Count ? weights[i] : 0;
+
+        double IWeightedDistribution<int>.Weight(int t) => this.Weight(t);
 
         public int Sample()
         {
