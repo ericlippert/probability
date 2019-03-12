@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Probability
 {
-    public sealed class Projected<A, R> : IDiscreteDistribution<R>
+    public sealed class Projected<A, R> : IDiscreteDistribution<R>, IWeightedDistribution<R>
     {
         private readonly IDiscreteDistribution<A> underlying;
         private readonly Func<A, R> projection;
@@ -36,5 +36,7 @@ namespace Probability
         public IEnumerable<R> Support() => this.weights.Keys;
         public int Weight(R r) =>
           this.weights.GetValueOrDefault(r, 0);
+
+        double IWeightedDistribution<R>.Weight(R r) => this.Weight(r);
     }
 }
