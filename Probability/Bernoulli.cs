@@ -4,7 +4,7 @@ using System.Linq;
 namespace Probability
 {
     using SCU = StandardContinuousUniform;
-    public sealed class Bernoulli : IDiscreteDistribution<int>
+    public sealed class Bernoulli : IDiscreteDistribution<int>, IWeightedDistribution<int>
     {
         public static IDiscreteDistribution<int> Distribution(int zero, int one)
         {
@@ -29,6 +29,7 @@ namespace Probability
         public int Sample() => (SCU.Distribution.Sample() <= ((double)Zero) / (Zero + One)) ? 0 : 1;
         public IEnumerable<int> Support() => Enumerable.Range(0, 2);
         public int Weight(int x) => x == 0 ? Zero : x == 1 ? One : 0;
+        double IWeightedDistribution<int>.Weight(int t) => this.Weight(t);
         public override string ToString() => $"Bernoulli[{this.Zero}, {this.One}]";
     }
 }
