@@ -2,7 +2,7 @@
 using System.Linq;
 namespace Probability
 {
-    public sealed class Singleton<T> : IDiscreteDistribution<T>
+    public sealed class Singleton<T> : IDiscreteDistribution<T>, IWeightedDistribution<T>
     {
         private readonly T t;
         public static Singleton<T> Distribution(T t) => new Singleton<T>(t);
@@ -11,5 +11,6 @@ namespace Probability
         public IEnumerable<T> Support() => Enumerable.Repeat(this.t, 1);
         public int Weight(T t) => EqualityComparer<T>.Default.Equals(this.t, t) ? 1 : 0;
         public override string ToString() => $"Singleton[{t}]";
+        double IWeightedDistribution<T>.Weight(T t) => this.Weight(t);
     }
 }
