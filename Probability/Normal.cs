@@ -2,7 +2,7 @@
 {
     using static System.Math;
     using SCU = StandardContinuousUniform;
-    public sealed class Normal : IDistribution<double>
+    public sealed class Normal : IWeightedDistribution<double>
     {
         public double Mean { get; }
         public double Sigma { get; }
@@ -22,5 +22,10 @@
           Sqrt(-2.0 * Log(SCU.Distribution.Sample())) *
             Cos(2.0 * PI * SCU.Distribution.Sample());
         public double Sample() => μ + σ * StandardSample();
+
+        private static readonly double piroot = 1.0 / Sqrt(2 * PI);
+
+        public double Weight(double x) =>
+            Exp(-(x - μ) * (x - μ) / (2 * σ)) * piroot / σ;
     }
 }
