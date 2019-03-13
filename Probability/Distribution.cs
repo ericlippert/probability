@@ -125,5 +125,8 @@ namespace Probability
             d.Support()
             .Select(s => 
                 (double)s * d.Weight(s)).Sum() / d.TotalWeight();
+
+        public static IWeightedDistribution<bool> BooleanBernoulli(double p) =>
+            Flip<bool>.Distribution(true, false, p);
     }
 }
