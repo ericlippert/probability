@@ -128,5 +128,8 @@ namespace Probability
 
         public static IWeightedDistribution<bool> BooleanBernoulli(double p) =>
             Flip<bool>.Distribution(true, false, p);
+
+        public static Metropolis<double> NormalMetropolis(this Func<double, double> weight) =>
+            Metropolis<double>.Distribution(weight, Normal.Standard, d => Normal.Distribution(d, 1.0));
     }
 }

@@ -11,6 +11,8 @@ namespace Probability
 
             double Mixture(double x) =>
                 Exp(-x * x) + Exp((1.0 - x) * (x - 1.0) * 10.0);
+
+            Console.WriteLine(Distribution.NormalMetropolis(Mixture).Histogram(-2, 2));
         }
     }
 }

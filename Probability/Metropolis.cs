@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Probability
 {
-    sealed class Metropolis<T> : IWeightedDistribution<T>
+    public sealed class Metropolis<T> : IWeightedDistribution<T>
     {
         private readonly IEnumerator<T> enumerator;
         private readonly Func<T, double> target;
