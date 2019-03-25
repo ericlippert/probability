@@ -131,5 +131,14 @@ namespace Probability
 
         public static Metropolis<double> NormalMetropolis(this Func<double, double> weight) =>
             Metropolis<double>.Distribution(weight, Normal.Standard, d => Normal.Distribution(d, 1.0));
+
+        public static Func<B, IWeightedDistribution<double>> Posterior<B>(
+            this IWeightedDistribution<double> prior,
+            Func<double, IWeightedDistribution<B>> likelihood) =>
+              b => 
+                Metropolis<double>.Distribution(
+                  d => prior.Weight(d) * likelihood(d).Weight(b),
+                  prior,
+                  d => Normal.Distribution(d, 1));
     }
 }
