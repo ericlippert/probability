@@ -26,6 +26,6 @@
         private static readonly double piroot = 1.0 / Sqrt(2 * PI);
 
         public double Weight(double x) =>
-            Exp(-(x - μ) * (x - μ) / (2 * σ)) * piroot / σ;
+            Exp(-(x - μ) * (x - μ) / (2 * σ  * σ)) * piroot / σ;
     }
 }
