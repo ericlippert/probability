@@ -126,6 +126,14 @@ namespace Probability
             .Select(s => 
                 (double)s * d.Weight(s)).Sum() / d.TotalWeight();
 
+        public static double ExpectedValue<T>(
+            this IDistribution<T> d,
+            Func<T, double> f) =>
+          d.Samples().Take(1000).Select(f).Average();
+
+        public static double ExpectedValue(this IDistribution<double> d) =>
+            d.ExpectedValue(x => x);
+
         public static IWeightedDistribution<bool> BooleanBernoulli(double p) =>
             Flip<bool>.Distribution(true, false, p);
 
