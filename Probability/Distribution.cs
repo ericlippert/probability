@@ -126,13 +126,16 @@ namespace Probability
             .Select(s => 
                 (double)s * d.Weight(s)).Sum() / d.TotalWeight();
 
-        public static double ExpectedValue<T>(
+        public static double ExpectedValueBySampling<T>(
             this IDistribution<T> d,
-            Func<T, double> f) =>
-          d.Samples().Take(1000).Select(f).Average();
+            Func<T, double> f,
+            int samples = 1000) =>
+          d.Samples().Take(samples).Select(f).Average();
 
-        public static double ExpectedValue(this IDistribution<double> d) =>
-            d.ExpectedValue(x => x);
+        public static double ExpectedValueBySampling(
+            this IDistribution<double> d,
+            int samples = 1000) =>
+            d.ExpectedValueBySampling(x => x, samples);
 
         public static double Area(
             Func<double, double> f,
@@ -144,7 +147,7 @@ namespace Probability
             .Select(x => f(x) / buckets)
             .Sum();
 
-        public static double ExpectedValue(
+        public static double ExpectedValueByQuadrature(
             this IWeightedDistribution<double> p,
             Func<double, double> f,
             double start = 0.0,
@@ -152,7 +155,7 @@ namespace Probability
             int buckets = 1000) =>
           Area(x => f(x) * p.Weight(x), start, end, buckets) /
             Area(p.Weight, start, end, buckets);
-
+            
         public static IWeightedDistribution<bool> BooleanBernoulli(double p) =>
             Flip<bool>.Distribution(true, false, p);
 

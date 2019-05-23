@@ -10,7 +10,7 @@ namespace Probability
 
             var p = Normal.Distribution(0.75, 0.09);
             double f(double x) => Atan(1000 * (x - .45)) * 20 - 31.2;
-            Console.WriteLine(p.ExpectedValue(f));
+            Console.WriteLine(p.ExpectedValueByQuadrature(f));
         }
     }
 }
