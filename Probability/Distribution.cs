@@ -126,6 +126,24 @@ namespace Probability
             .Select(s => 
                 (double)s * d.Weight(s)).Sum() / d.TotalWeight();
 
+        public static double ExpectedValueByImportance(
+            this IWeightedDistribution<double> p,
+            Func<double, double> f,
+            double qOverP,
+            IWeightedDistribution<double> q,
+            int n = 1000) =>
+            qOverP * q.ExpectedValueBySampling(x => f(x) * p.Weight(x) / q.Weight(x), n);
+
+        public static double ExpectedValueByImportance(
+            this IWeightedDistribution<double> p,
+            Func<double, double> f,
+            IWeightedDistribution<double> q,
+            int n = 1000)
+        {
+            var pOverQ = q.ExpectedValueBySampling(x => p.Weight(x) / q.Weight(x), n);
+            return p.ExpectedValueByImportance(f, 1.0 / pOverQ, q, n);
+        }
+
         public static double ExpectedValueBySampling<T>(
             this IDistribution<T> d,
             Func<T, double> f,
