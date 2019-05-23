@@ -134,6 +134,25 @@ namespace Probability
         public static double ExpectedValue(this IDistribution<double> d) =>
             d.ExpectedValue(x => x);
 
+        public static double Area(
+            Func<double, double> f,
+            double start = 0.0,
+            double end = 1.0,
+            int buckets = 1000) =>
+          Enumerable.Range(0, buckets)
+            .Select(i => start + (end - start) * i / buckets)
+            .Select(x => f(x) / buckets)
+            .Sum();
+
+        public static double ExpectedValue(
+            this IWeightedDistribution<double> p,
+            Func<double, double> f,
+            double start = 0.0,
+            double end = 1.0,
+            int buckets = 1000) =>
+          Area(x => f(x) * p.Weight(x), start, end, buckets) /
+            Area(p.Weight, start, end, buckets);
+
         public static IWeightedDistribution<bool> BooleanBernoulli(double p) =>
             Flip<bool>.Distribution(true, false, p);
 

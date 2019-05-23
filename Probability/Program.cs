@@ -32,7 +32,8 @@ namespace Probability
             // Episode29.DoIt();
             // Episode30.DoIt();
             // Episode31.DoIt();
-            Episode32.DoIt();
+            // Episode32.DoIt();
+            Episode33.DoIt();
             Console.WriteLine("Press Enter to finish");
             Console.ReadLine();
         }
